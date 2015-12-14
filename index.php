@@ -6,8 +6,16 @@
  * Time: 13:05
  */
 
-$usergroups = array ("admin", "master", "store", "slave");
-$usergroup = "admin";
+SESSION_START();
+
+$usergroup = $_SESSION["user"]["usergroup"];
+
+/**
+if (isset($_GET["logedin"])){
+    var_dump($_SESSION["user"]);
+    exit;
+}
+**/
 
 ///**
 require_once __DIR__.'../../vendor/autoload.php';
@@ -55,7 +63,8 @@ $mainmenue[] = ["href" => "a href=main.php?MKZ=admin&UGP=" . $_SESSION["user"]["
 $arr = array('title' => "Hifi-Fabik intern",
     'main' => $mainmenue,
 );
-if ($_SESSION["login"] == 1) {
+
+if (isset($_GET["logedin"])) {
     $app->get('/', function () use ($app, $arr) {
         return $app['twig']->render('main.html', $arr);
     });

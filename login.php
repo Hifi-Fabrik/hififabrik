@@ -1,4 +1,5 @@
 <?php
+
     $_db_host = "localhost";            # meist localhost
     $_db_datenbank = "hififabrik_intern";
     $_db_username = "hififabrik_int";
@@ -63,14 +64,17 @@
 
             # Den Eintrag vom User in der Session speichern !
             $_SESSION["user"] = mysql_fetch_array($_res, MYSQL_ASSOC);
+            $_SESSION["user"]["lastlogin"]=date("d.m.Y H:i:s", $_SESSION["user"]["letzter_login"]);
 
             # Das Einlogdatum in der Tabelle setzen !
-            $_sql = "UPDATE login_usernamen SET letzter_login=NOW()
+            $ts=time();
+            $_sql = "UPDATE login_usernamen SET letzter_login=$ts
                      WHERE id=".$_SESSION["user"]["id"];
+
             mysql_query($_sql);
+            $GLOBALS=$_SESSION["user"];
 
-echo $_SESSION["user"]["user_nachname"];
-
+            header("Location: ../hififabrik_intern/index.php?logedin&userid=".$_SESSION["user"]["id"]);
         }
         else
         {
@@ -90,7 +94,6 @@ echo $_SESSION["user"]["user_nachname"];
 
     # Hier wäre der User jetzt gültig angemeldet ! Hier kann
     # Programmcode stehen, den nur eingeloggte User sehen sollen !!
-    echo "Hallo, Sie sind erfolgreich eingeloggt !<br>";
 
     ##################################################################
 

@@ -12,7 +12,8 @@
             border: 1px solid black;
         }
 
-        body        { width: 30em; }
+        body        { width: 50em; }
+        .arial      { font-family: arial;}
         .sans-serif { font-family: sans-serif; }
         .serif      { font-family: serif; }
         .cursive    { font-family: cursive; }
@@ -22,7 +23,7 @@
     <style src="style.css"></style>
     <script src="java.js"></script>
 </head>
-<body>
+<body style="font-family: Arial; font-size: 12pt; height: 24px">
 
 <?php
 /**

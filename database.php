@@ -8,6 +8,19 @@
 
 // magento bestellung
 
+global $mySession;
+
+class mySession{
+    public $logedin=false;
+    public $userid=0;
+    public $user="";
+    public $user_nachname="";
+    public $user_vorname="";
+    public $usergroup="";
+    public $last_login=0;
+    public $is_active_user=false;
+}
+
 class order
 {
     public $status_mag = "";

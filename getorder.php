@@ -386,11 +386,25 @@ function CreatePDFFile($servername, $username, $password, $dbname, $order, $orde
     }
 }
 
+function GetUserInfo(){
+    SESSION_START();
+    $userinfo="<div style=\"font-family: Arial; font-size: 10px; \"><br>aktueller Benutzer: ";
+    $userinfo=$userinfo . $_SESSION["user"]["user_vorname"] . " ";
+    $userinfo=$userinfo . $_SESSION["user"]["user_nachname"] . " (letzte Anmeldung: ";
+    $userinfo=$userinfo . $_SESSION["user"]["lastlogin"];
+    $userinfo=$userinfo . ")<br><br></div>";
+    return $userinfo;
+}
+
 function CreateOrderHead($order, $MKZ, $UGP){
 
-    $ts = strtotime($order->order_date);
+    SESSION_START();
 
-    $html = "Bestellung <b>" . $order->order_number . "</b> vom <b>" . date("d.m.Y G:i:s", $ts) . "</b><br>";
+    $userinfo = GetUserInfo();
+
+    $ts = strtotime($order->order_date);
+    $html = "<div style=\"font-family: Arial; font-size: 14px; \">";
+    $html = $html . "Bestellung <b>" . $order->order_number . "</b> vom <b>" . date("d.m.Y G:i:s", $ts) . "</b><br>";
     $html = $html . "Besteller: <b>" . $order->ba_firstname . " " . $order->ba_lastname . "</b><br><br>\n";
     $html = $html . "Status: <b>" . $order->status . "</b><br><br>\n";
     $html = $html . "Lieferadresse:<br>\n";
@@ -411,7 +425,7 @@ function CreateOrderHead($order, $MKZ, $UGP){
         $html = $html . "td { text-align: left; };\n";
         $html = $html . "</style>\n";
 
-        $html = $html. "<div id=\"txtHint\"><b>Person info will be listed here...</b></div>";
+//        $html = $html. "<div id=\"txtHint\"><b>Person info will be listed here...</b></div>";
 
         if ($order->email != "") {
             $html = $html . "<tr><td width=\"10%\">E-Mail</td><td width=\"20%\">" . $order->email . "</td><td width=\"60%\"></td></tr>";
@@ -424,7 +438,8 @@ function CreateOrderHead($order, $MKZ, $UGP){
 
     }
     $html = $html . "Zahlungsweise: <p style=\"font-family: Arial; font-size:18px;\" ><b>" . GetPayMethod($order->paymethod) . "</b></p>\n";
-    return $html;
+    $html = $html ."</div>";
+    return $userinfo . $html;
 }
 
 function CreateOrderArticle($oarts, $MKZ, $UGP){
@@ -483,7 +498,9 @@ function CreateOrderArticle($oarts, $MKZ, $UGP){
 
 function CreateOrderTableHead($MKZ, $UGP)
 {
-    $head = "";
+    $userinfo = GetUserInfo();
+
+    $head = $userinfo;
     $head = $head . "<p style=\"font-family: Arial; font-size:18px;\" >Bestellungen aus Magento</p>\n";
     $timestamp = strtotime("-1 days");
     $head = $head . "<p style=\"font-family: Arial; font-size:12px;\" >ab Datum: \n";
