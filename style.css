@@ -1,0 +1,25 @@
+/* CSS */
+.btnExample {
+    color: #900;
+    background: #FF0;
+    font-weight: bold;
+    border: 1px solid #900;
+}
+
+.btnExample:hover {
+    color: #FFF;
+    background: #900;
+}
+
+button {
+    color: #900;
+    border: 1px solid #900;
+    font-weight: bold;
+}
+@font-face
+{
+    font-family: "Arial, barcode font, Helvetica";
+    local: "barcode font";
+}
+
+

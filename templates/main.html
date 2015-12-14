@@ -1,0 +1,21 @@
+<!DOCTYPE html>
+<html lang="de">
+<head>
+    <meta charset="UTF-8">
+    <link rel=\"stylesheet\" type=\"text/css\" href=\"style.css\" />
+    <title>{{ title }}</title>
+</head>
+<body>
+    <form action='main.php' method="get">
+        <table width="640">
+        {% for item in main %}
+            {% if item.text != "Lager und Waren verwalten" %}
+                <tr><td align="center" bgcolor={{ item.bgcolor }} style="font-family: Arial; height: 150px"><{{ item.href }}>{{ item.text}}</td></tr>
+            {% else %}
+                <tr><td align="center" bgcolor={{ item.bgcolor }} style="font-family: barcode font; font-size:48px; height: 150px"><{{ item.href }}>{{ item.text}}</td></tr>
+            {% endif %}
+        {% endfor %}
+        </table>
+    </form>
+</body>
+</html>

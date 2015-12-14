@@ -1,0 +1,84 @@
+<!DOCTYPE html>
+<html lang="de">
+<head>
+    <meta charset="UTF-8">
+    <title>Warenbewegung buchen</title>
+</head>
+<body>
+
+<?php
+if (isset ($_GET["BKC"])) {
+    $BKC = $_GET["BKC"];
+echo $BKZ;
+//    header("Location: http://www.hifi-fabrik.de/IPKweb/Lager.php?BKC=" . $BKC . "");
+//    exit;
+} else {
+    $BKC = "";
+}
+if (isset ($_GET["Barcode"])) {
+    $EAN = $_GET["Barcode"];
+echo $EAN;
+//    header("Location: http://www.hifi-fabrik.de/IPKweb/Lager.php?BKC=" . $BKC . "");
+//    exit;
+    echo $BKZ . " - ". $EAN;
+} else {
+    $EAN = "";
+}
+?>
+
+<form method="get" action="Lager_alt.php">
+
+<?php
+print_r($_GET);
+echo 'Hallo ' . htmlspecialchars($_GET["BKC"]) . '!';
+?>
+
+<table border="1" width="1050">
+    <tr>
+        <th colspan="3" height="100">
+        HiFi-Fabrik Lagerbestand erfassen
+        </th>
+    </tr>
+    <tr>
+        <th height="50" width="350" bgcolor="#7fff00">Warenzugang</th>
+        <th height="50" width="350" bgcolor="#f5f5dc">Ware umlagern</th>
+        <th height="50" width="350" bgcolor="#6495ed">Ware versenden</th>
+    </tr>
+</table>
+<br>
+<br>
+<table border="0" width="1050">
+    <tr>
+        <td height="50" width="350" bgcolor="#7fff00" align="center"><a href="buchen.html?BKC=WEOVP">Ware OVP vom Hersteller ins Lager</a></td>
+        <td height="50" width="350" bgcolor="#f5f5dc" align="center"><a href="buchen.html?BKC=WUOVPRES">Ware OVP reservieren</a></td>
+        <td height="50" width="350" bgcolor="#6495ed" align="center"><a href="buchen.html#BKC=WACUSRES">Ware an Kunde versenden MIT Reservierung</a></td>
+    </tr>
+    <tr>
+        <td height="50" width="350" bgcolor="#7fff00" align="center"><a href="buchen.html#BKC=WEREPSER">Ware aus Reparatur an Service</a></td>
+        <td height="50" width="350" bgcolor="#f5f5dc" align="center"><a href="buchen.html#BKC=WUBWARES">Ware aus B-Ware reservieren</a></td>
+        <td height="50" width="350" bgcolor="#6495ed" align="center"><a href="buchen.html#BKC=WACUSDIR">Ware an Kunde versenden OHNE Reservierung</a></td>
+    </tr>
+    <tr>
+        <td height="50" width="350" bgcolor="#7fff00" align="center"><a href="buchen.html#BKC=WESTOOVP">Ware aus Storno in OVP Lager (ungeöffnet)</a></td>
+        <td height="50" width="350" bgcolor="#f5f5dc" align="center"><a href="buchen.html#BKC=WUAUSRES">Ware aus Ausstellung reservieren</a></td>
+        <td height="50" width="350" bgcolor="#6495ed" align="center"><a href="buchen.html#BKC=WALEIOVP">Leihstellung an Kunden aus OVP-Lager</a></td>
+    </tr>
+    <tr>
+        <td height="50" width="350" bgcolor="#7fff00" align="center"><a href="buchen.html#BKC=WESTOBWA">Ware aus Storno ins B-Warenlager (geöffnet)</a></td>
+        <td height="50" width="350" bgcolor="#f5f5dc" align="center"><a href="buchen.html#BKC=WURESOVP">Ware aus Reservierung in OVP-Lager</a></td>
+        <td height="50" width="350" bgcolor="#6495ed" align="center"><a href="buchen.html#BKC=WALEIBWA">Leihstellung an Kunden aus B-Waren Lager</a></td>
+    </tr>
+    <tr>
+        <td height="50" width="350" bgcolor="#7fff00" align="center"><a href="buchen.html#BKC=WESTOAUS">Ware aus Storno in Ausstellungsraum</a></td>
+        <td height="50" width="350" bgcolor="#f5f5dc" align="center"><a href="buchen.html#BKC=WURESBWA">Ware aus Reservierung in B-Waren Lager</a></td>
+        <td height="50" width="350" bgcolor="#6495ed" align="center"><a href="buchen.html#BKC=WALEIAUS">Leihstellung an Kunden aus Ausstellung</a></td>
+    </tr>
+    <tr>
+        <td height="50" width="350" bgcolor="#7fff00" align="center"><a href=""></a></td>
+        <td height="50" width="350" bgcolor="#f5f5dc" align="center"><a href="buchen.html#WUREAUS">Ware aus Reservierung in Ausstellung</a></td>
+        <td height="50" width="350" bgcolor="#6495ed" align="center"><a href=""></a></td>
+    </tr>
+</table>
+</form>
+</body>
+</html>
