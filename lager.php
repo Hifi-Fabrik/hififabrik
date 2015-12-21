@@ -71,6 +71,7 @@ if ($func == "") {
     }
 
     if ($eanorder == "") {
+        echo GetUserInfo();
         echo "<h3>Bitte scannen Sie die Auftragsnummer</h3><br>";
         echo "<input autofocus type=\"text\" name=\"order\" style=\"font-family: Arial; font-size: 18pt; height: 24px\" value=\"" . $eanorder . "\">";
         echo "<br><br>";

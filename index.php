@@ -62,13 +62,19 @@ $mainmenue[] = ["href" => "a href=main.php?MKZ=admin&UGP=" . $_SESSION["user"]["
 
 $arr = array('title' => "Hifi-Fabik intern",
     'main' => $mainmenue,
+    'userinfo' => $userinfo,
 );
 
 if (isset($_GET["logedin"])) {
+//    $userinfo = GetUserInfo();
     $app->get('/', function () use ($app, $arr) {
         return $app['twig']->render('main.html', $arr);
     });
 } else {
+    $users = array(rw, ar, jr, ab, ik, ps, re, jw, sg);
+    $arr=array('tile' => "testtitel",
+               'users' => $users,
+        );
     $app->get('/', function () use ($app, $arr) {
         return $app['twig']->render('login_formular.html', $arr);
     });

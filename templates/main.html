@@ -7,6 +7,7 @@
 </head>
 <body>
     <form action='main.php' method="get">
+        {{ userinfo }}
         <table width="640">
         {% for item in main %}
             {% if item.text != "Lager und Waren verwalten" %}

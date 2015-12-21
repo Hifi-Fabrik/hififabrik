@@ -388,9 +388,9 @@ function CreatePDFFile($servername, $username, $password, $dbname, $order, $orde
 
 function GetUserInfo(){
     SESSION_START();
-    $userinfo="<div style=\"font-family: Arial; font-size: 10px; \"><br>aktueller Benutzer: ";
+    $userinfo="<div style=\"font-family: Arial; font-size: 12px; \"><br>aktueller Benutzer: ";
     $userinfo=$userinfo . $_SESSION["user"]["user_vorname"] . " ";
-    $userinfo=$userinfo . $_SESSION["user"]["user_nachname"] . " (letzte Anmeldung: ";
+    $userinfo=$userinfo . $_SESSION["user"]["user_nachname"] . "</div><div style=\"font-family: Arial; font-size: 10px; \"> (letzte Anmeldung: ";
     $userinfo=$userinfo . $_SESSION["user"]["lastlogin"];
     $userinfo=$userinfo . ")<br><br></div>";
     return $userinfo;

@@ -2,13 +2,49 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <title>Hifi-Fabrik login</title>
+    <title>Hifi-Fabrik Mitarbeiter Login</title>
+
+    <script type="text/javascript" src="http://ajax.googleapis.com/ajax/libs/jquery/1.3/jquery.min.js"></script>
+
+<script type="text/javascript">
+    function UserChanged(object){
+        alert(object);
+        $( "#userkz" ).html("bhjbhjbhj");
+//        document.getElementById("#userkz").outerHTML = "njknjknk";
+    }
+
+</script>
+
 </head>
-<body>
+<body style="width: 640px; font-family: Helvetica; ">
 <form method="POST" action="../hififabrik_intern/login.php">
-    Ihr Username: <input name="username"><br>
-    Ihr Passwört: <input name="passwort" type=password><br>
-    <input type=submit name=submit value="Einloggen">
+<table><tr>
+<td colspan="3" align="center" width="500px"><h3>Hifi-Fabrik St. Leon Mitarbeiterlogin</h3></td>
+</tr><tr>
+<td width="50px"></td><td align="right">IhrBenutzername:</td><td><input id="userkz" name="username" type="text" value=""></td>
+
+    <td>
+    <select onchange="UserChanged(this.value)" style="display:none;">
+        {% for user in users %}
+        <option value="{{ user|e }}">{{ user|e }}</option>
+        {% endfor %}
+    </select>
+    </td>
+
+</tr>
+<td width="50px"></td><td align="right">Ihr Passwort:</td><td> <input name="passwort" type=password></td>
+</tr><tr>
+<td width="50px"></td><td align="right">Logindaten merken:</td><td><input type=checkbox name="stayalive"></td>
+</tr>
+<td width="50px" height="50"></td><td></td><td><input type=submit name=submit align="center" style="width: 160px; " value="Einloggen"></td>
+</tr>
+<td width="50px"></td><td align="right">neues Passwort:</td><td><input type="password" name="newpassword"></td>
+</tr>
+<td width="50px"></td><td align="right">neues Passwort wiederholen:</td><td><input type="password" name="retypenewpassword"></td>
+</tr>
+<td width="50px" height="50"></td><td></td><td><input type=submit name=changepassword align="center" style="width: 160px; " value="Passwort ändern"></td>
+</tr>
+</table>
 </form>
 </body>
 </html>
