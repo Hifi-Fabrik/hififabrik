@@ -95,19 +95,17 @@ function CheckScan() {
 
 function DoBookingWares(){
     alert ('dobooking wares');
-    if (window.XMLHttpRequest) {
-        // code for IE7+, Firefox, Chrome, Opera, Safari
-        xmlhttp=new XMLHttpRequest();
-    } else { // code for IE6, IE5
-        xmlhttp=new ActiveXObject("Microsoft.XMLHTTP");
-    }
-    xmlhttp.onreadystatechange=function() {
-        if (xmlhttp.readyState==4 && xmlhttp.status==200) {
-            document.getElementById("txtHint").innerHTML=xmlhttp.responseText;
+
+    $.ajax({
+        url: '/echo/html/',
+        type: 'PUT',
+        data: "name=John&location=Boston",
+        success: function(data) {
+            alert('Load was performed.');
         }
-    }
-    xmlhttp.open("GET","booking.php?function=BookReservation&order=100018323 ",true);
-    xmlhttp.send();
+    });
+
+
     alert ('dobooking wares end');
 }
 

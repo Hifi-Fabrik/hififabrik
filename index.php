@@ -66,7 +66,7 @@ $arr = array('title' => "Hifi-Fabik intern",
 );
 
 if (isset($_GET["logedin"])) {
-//    $userinfo = GetUserInfo();
+    $userinfo = GetUserInfo();
     $app->get('/', function () use ($app, $arr) {
         return $app['twig']->render('main.html', $arr);
     });

@@ -21,6 +21,7 @@
         .monospace  { font-family: monospace; }
     </style>
     <style src="style.css"></style>
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.3/jquery.min.js"></script>
     <script src="java.js"></script>
 </head>
 <body style="font-family: Arial; font-size: 12pt; height: 24px">
