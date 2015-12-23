@@ -84,7 +84,7 @@ if ($func == "") {
             $orderlines = GetOrderLine($order_db->entity_id, $order);
             if ($order_db->entity_id != "") {
                 echo CreateOrderHead($order_db, $MKZ, $UGP);
-                echo CreateOrderArticle($orderlines, $MKZ, $UGP);
+                echo CreateOrderArticle($orderlines, $MKZ, $UGP, true);
             } else {
                 echo "<span style=\"font-size: 18pt;color:#ff0000;\" >Bestellung " . $order . " existiert nicht.</span>";
                 echo "<br><br>";

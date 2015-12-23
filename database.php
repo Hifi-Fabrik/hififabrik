@@ -69,6 +69,17 @@ class mag_order
     public $bemerkung = "";
 }
 
+// order history
+class order_history {
+    public $order_number = "";
+    public $order_activity = "";
+    public $order_activity_text = "";
+    public $order_memo = "";
+    public $book_user = "";
+    public $book_date_first = "";
+    public $book_date = "";
+}
+
 // magento bestellzeile
 class mag_order_line {
     public $order_number = "";
@@ -200,6 +211,23 @@ function UpdateOrder (&$conn, $order){
     }
 }
 
+function MakeOrderHistoryEntry(&$conn, $order, $activity, $text){
+    session_start();
+    $user = $_SESSION['user']['username'];
+
+    $sql = "REPLACE INTO `orders_history` SET order_increment_id = '" . $order . "', order_activity = '" . $activity;
+    $sql = $sql .  "', order_activity_text='" . $text;
+    $sql = $sql .  "', book_user='" . $user;
+    $sql = $sql .  "', book_date_first='" . date('Y-m-d H:i:s', time()) . "'";
+
+    if ($conn->query($sql) === TRUE) {
+//        echo "record " . $order->increment_id . " ge�ndert.<br>";
+    } else {
+//        echo "record " . $order->increment_id . " NICHT ge�ndert.<br>";
+        echo $sql. "<br>";
+    }
+}
+
 function SaveTheOrders ($servername, $username, $password, $dbname, $orders){
     if (db_exists($servername, $username, $password, $dbname)) {
 // Create connection
@@ -215,6 +243,7 @@ function SaveTheOrders ($servername, $username, $password, $dbname, $orders){
             } else {
                 CreateOrder ($conn, $order);
             };
+            MakeOrderHistoryEntry ($conn, $order->increment_id, "IMPORT", "vom Magento Shop importiert.");
         }
     }
 }

@@ -95,17 +95,14 @@ function CheckScan() {
 
 function DoBookingWares(){
     alert ('dobooking wares');
-
     $.ajax({
-        url: '/echo/html/',
+        url: 'lager.php',
         type: 'PUT',
-        data: "name=John&location=Boston",
+        data: "order=12345&article=11111",
         success: function(data) {
             alert('Load was performed.');
         }
     });
-
-
     alert ('dobooking wares end');
 }
 

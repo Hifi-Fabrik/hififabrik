@@ -140,7 +140,7 @@ $password = "Hf54mC74slRw";
 $dbname = "hififabrik_intern";
 
 if ($func == "PrintChecked"){
-    $orders = "KEINE Bestellung ausgewäht";
+    $orders = "KEINE Bestellung ausgewï¿½ht";
     if (isset($_GET['orders'])){
         $orders = $_GET['orders'];
     }
@@ -197,7 +197,7 @@ print_r($orders);
         $order_db = GetOrder($order);
         $orderlines = GetOrderLine($order_db->entity_id, $order);
         echo CreateOrderHead($order_db, $MKZ, $UGP);
-        echo CreateOrderArticle($orderlines, $MKZ, $UGP);
+        echo CreateOrderArticle($orderlines, $MKZ, $UGP, true);
 
         $func = "PrintReservation";
 

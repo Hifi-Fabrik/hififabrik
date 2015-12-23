@@ -305,6 +305,14 @@ function CreatePDFFile($servername, $username, $password, $dbname, $order, $orde
                     $pdf->SetFillColor(0, 0, 0);
                 }
 
+                if ($order->country_id != "DE") {
+                    $pdf->SetFont('Helvetica', 'B', 24);
+                    $pdf->SetFillColor(204, 204, 204);
+                    $pdf->SetXY(80, 85);
+                    $pdf->MultiCell(20, 15, "DPD", 1, 'R', true);
+                    $pdf->SetFillColor(0, 0, 0);
+                    $pdf->SetFont('Helvetica', 'B', 10);
+                }
 
                 $pdf->Text(10, 75, $order->ba_lastname . ", " . $order->ba_firstname, 0, 1, 'L');
 
@@ -378,7 +386,7 @@ function CreatePDFFile($servername, $username, $password, $dbname, $order, $orde
                 die("Connection failed: " . $conn->connect_error);
             }
             $sql = "UPDATE `orders` SET status=\"printed\" WHERE increment_id like '" . $order->order_number . "'";
-
+            MakeOrderHistoryEntry ($conn, $order->order_number, "RESPRINTED", "Reservierungszettel wurden gedruckt.");
             $result = $conn->query($sql);
         }
     } else {
@@ -442,8 +450,9 @@ function CreateOrderHead($order, $MKZ, $UGP){
     return $userinfo . $html;
 }
 
-function CreateOrderArticle($oarts, $MKZ, $UGP){
-    $html = "<table id=\"Artikel\" cellpadding=\"1\">\n";
+function CreateOrderArticle($oarts, $MKZ, $UGP, $ShowHistory){
+    $html = "<i><b>bestellte(r) Artikel:</b></i><br>\n";
+    $html = $html . "<table id=\"Artikel\" cellpadding=\"1\">\n";
     $html = $html . "<style type=\"text/css\">\n";
     $html = $html . "table { width: 1200px; }\n";
     $html = $html . "table { border-collapse: collapse;}\n";
@@ -474,26 +483,109 @@ function CreateOrderArticle($oarts, $MKZ, $UGP){
         $id = $id + 1;
         $html = $html . "<tr id=row".$id." BGCOLOR=\"".$lcol."\">\n";
         $html = $html . "<td align='right'>" . round($oart->qty_ordered) . "</td>\n";
-        $html = $html . "<td align='right'>" . GetEinheit($oart->einheit, GetVPE($oart->vpe)) . "</td>\n";
+        $html = $html . "<td id=einheit".$id." align='right'>" . GetEinheit($oart->einheit, GetVPE($oart->vpe)) . "</td>\n";
         $html = $html . "<td align='right'>" . GetLaenge ($oart->product_options) . "</td>\n";
         $html = $html . "<td align='left'>" . $oart->product_quotes . "</td>\n";
-        $html = $html . "<td align='right'>" . GetVPE($oart->vpe) . "</td>\n";
+        $html = $html . "<td id=vpe".$id." align='right'>" . GetVPE($oart->vpe) . "</td>\n";
         $html = $html . "<td align='right'>" . GetPackStueck ($oart->packstueck) . "</td>\n";
-        $html = $html . "<td align='left'>" . $oart->sku . "</td>\n";
-        $html = $html . "<td align='left'>" . $oart->name . "</td>\n";
-        $html = $html . "<td align='left' id=\"EAN".$id."\">" . $oart->ean . "</td>\n";
+        $html = $html . "<td id=sku".$id." align='left'>" . $oart->sku . "</td>\n";
+        $html = $html . "<td id=name".$id." align='left'>" . $oart->name . "</td>\n";
+        $html = $html . "<td id=EAN".$id." align='left' >" . $oart->ean . "</td>\n";
         $html = $html . "<td align='left'>" . $oart->product_base . "</td>\n";
-        $html = $html . "<td align='left'>" . $oart->product_ltxt . "</td>\n";
-        $html = $html . "<td align='left' id=\"SCAN".$id."\"><input type=\"text\" name=\"SCAN".$id."\" onchange=\"eanchanged(this.name, this.value)\"></td>\n";
+        $html = $html . "<td id=ltext".$id." align='left'>" . $oart->product_ltxt . "</td>\n";
+        $html = $html . "<td id=SCAN".$id." align='left'><input type=\"text\" name=\"SCAN".$id."\" onchange=\"eanchanged(this.name, this.value)\"></td>\n";
         $html = $html . "</tr>\n";
     }
     $html = $html . "</table><br>\n";
-
 //    $html = $html . "<a href=\"order.php?MKZ=" . $MKZ . "&UPG=" . $UGP .  "&order=" . $oart->order_number . "&function=PrintReservation\"><button style=\"width:200px\">Reservierung drucken</button></a><br>\n";
-
 //    $html = $html . "<button style=\"width:200px\">Reservierung buchen</button><br>\n";
 
+    $htmlh = "";
+    if ($ShowHistory === true){
+        $hists = GetOrderHistory ('orders_history', 'order_increment_id', $oarts[0]->order_number, $oarts[0]->order_number);
+        $htmlh = CreateOrderHistory ($hists);
+    }
+
+    return $html . $htmlh;
+}
+
+function CreateOrderHistory ($histories)
+{
+    $html = "<i><b>Historie der Bestellung:</b></i><br>\n";
+    if ($histories != null) {
+        $html = $html . "<table>";
+        $html = $html . "<style type=\"text/css\">\n";
+        $html = $html . "table { width: 1200px; }\n";
+        $html = $html . "table { border-collapse: collapse;}\n";
+        $html = $html . "table, td, th { border: 1px solid black; }\n";
+        $html = $html . "td, th { height: 10px; font-family: Arial; font-Size: 12px};\n";
+        $html = $html . "th { text-align: right; };\n";
+        $html = $html . "td { text-align: left; };\n";
+        $html = $html . "td { style=\"white-space:nowrap;\" };\n";
+        $html = $html . "</style>\n\n";
+
+        $html = $html . "<tr>";
+        $html = $html . "<td style=\"width: 80px; \">Bestellung</td>";
+        $html = $html . "<td style=\"width: 100px; \">Status</td>";
+        $html = $html . "<td style=\"width: 250px; \">Bemerkung</td>";
+        $html = $html . "<td>Notiz</td>";
+        $html = $html . "<td style=\"width: 50px; \">Benutzer</td>";
+        $html = $html . "<td style=\"width: 120px; \">durchgeführt am</td>";
+        $html = $html . "</tr>\n\n";
+
+        foreach ($histories as $hist) {
+            $html = $html . "<tr>\n";
+            $html = $html . "<td  style=\"width: 80px; \">" . $hist->order_number . "</td>\n";
+            $html = $html . "<td  style=\"width: 100px; \">" . $hist->order_activity . "</td>\n";
+            $html = $html . "<td style=\"width: 250px; \">" . $hist->order_activity_text . "</td>\n";
+            $html = $html . "<td><textarea rows=\"1\" cols=\"80\" >" . $hist->order_memo . "</textarea></td>\n";
+            $html = $html . "<td style=\"width: 50px; \" align=\"center\" >" . $hist->book_user . "</td>\n";
+            $html = $html . "<td style=\"width: 120px; \">" . $hist->book_date . "</td>\n";
+            $html = $html . "</tr>\n";
+        }
+        $html = $html . "</table><br>\n";
+    } else {
+        $html = $html . "KEINE HISTORIE GEFUNDEN !!!<br><br>\n";
+    }
     return $html;
+};
+
+
+function GetOrderHistory ($table_name, $keyfield, $keyvalue, $order_number)
+{
+    require_once ('database.php');
+
+    $servername = "localhost";
+    $username = "hififabrik_int";
+    $password = "Hf54mC74slRw";
+    $dbname = "hififabrik_intern";
+
+    if (db_exists($servername, $username, $password, $dbname)) {
+// Create connection
+        $conn = new mysqli($servername, $username, $password, $dbname);
+        $sql = "SELECT * FROM " . $table_name . " WHERE " . $keyfield . " LIKE '" . $keyvalue . "'";
+        $result = $conn->query($sql);
+        $hists = array();
+        if ($result->num_rows > 0) {
+            // output data of each row
+            while ($row = $result->fetch_assoc()) {
+                $hist = new order_history();
+                $hist->order_number = $row['order_increment_id'];
+                $hist->order_activity = $row['order_activity'];
+                $hist->order_activity_text = $row['order_activity_text'];
+                $hist->order_memo = $row['order_memo'];
+                $hist->book_user = $row['book_user'];
+                $hist->book_date_first = $row['book_date_first'];
+                $hist->book_date = $row['book_date'];
+                $hists[] = $hist;
+            }
+        } else {
+            $hists = null;
+        }
+    } else {
+        die("Database not ready to use !!!");
+    }
+    return $hists;
 }
 
 function CreateOrderTableHead($MKZ, $UGP)
