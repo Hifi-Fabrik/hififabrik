@@ -13,6 +13,13 @@ class mySession{
     public $is_active_user = false;
 }
 
+class Lagerort
+{
+    public $lort_kz = "";
+    public $lort_name = "";
+    public $lort_artikel = "";
+    public $menge = 0;
+}
 class Article
 {
     public $entity_id = 0;

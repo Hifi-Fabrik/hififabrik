@@ -124,9 +124,41 @@ if ($func == "") {
                 $art = new Article;
                 $articlefound = false;
                 if ($art = mysql_fetch_object($res)){
-var_dump($art); // showthearticle !!!
-echo "<br>";
-                    $articlefound = true;
+                    echo GetUserInfo();
+                    echo "<table  border=\"0\" style='width: 1024px; border-collapse: collapse; '>";
+                    echo "<tr>";
+                    echo "<th>EAN-Nummer</th>";
+                    echo "<th>SKU</th>";
+                    echo "<th>Hersteller</th>";
+                    echo "<th>Artikel</th>";
+                    echo "<th>Preis</th>";
+                    echo "<th>Shop</th>";
+                    echo "<th>Menge</th>";
+                    echo "<th>minim</th>";
+                    echo "<th>Lager</th>";
+                    echo "</tr>";
+                    echo "<tr>";
+                    echo "<td width='50px'>" . $art->ean . "</td>";
+                    echo "<td width='50px'>" . $art->sku . "</td>";
+                    echo "<td width='50px'>" . $art->manufacturer_value . "</td>";
+                    echo "<td width='250px'>" . $art->name . "</td>";
+                    echo "<td width='50px'>" . $art->price . "</td>";
+                    echo "<td width='150px'>" . $art->lieferbar_value . "</td>";
+                    echo "<td width='50px'>" . $art->qty . "</td>";
+                    echo "<td width='50px'>" . $art->min_qty . "</td>";
+                    echo "<td width='50px'>" . $art->is_in_stock . "</td>";
+                    echo "</tr>";
+                    echo "</table>";
+
+                    echo "<br><span>Lagerbestand des Artikels nach Lagerort(en):</span><br><br><br>";
+
+                    $link = OpenDatabase();
+                    $sql = "SELECT * FROM `Lagerorte`";
+                    $res = mysql_query($sql, $link);
+                    $lort = new Lagerort();
+                    while ($lort = mysql_fetch_object($res)){
+
+                    }
                 }
                 if (!$orderfound && !$articlefound){
                     echo "<span style=\"font-size: 12pt;color:#ff0000;\" >Artikel mit EAN Nummer " . $eanorder . " existiert nicht.</span><br>";
