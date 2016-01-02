@@ -22,4 +22,6 @@ button {
     local: "barcode font";
 }
 
-
+body.waiting * {
+    cursor: progress;
+}

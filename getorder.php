@@ -253,7 +253,7 @@ function CreatePDFFile($servername, $username, $password, $dbname, $order, $orde
                     $po = GetLaenge($orderarticle->product_options);
                 }
 // jetzt gehts  3 zeilig, keine kürzung mehr notwendig
-//                $orderarticle->name = substr($orderarticle->name, 0, 45);
+                $orderarticle->name = substr($orderarticle->name, 0, 45);
                 $pdf->MultiCell(80, 6, $orderarticle->name, 0, 'L');
 
                 $pdf->SetFont('Helvetica', 'B', 12);
