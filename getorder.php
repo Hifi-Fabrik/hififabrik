@@ -212,6 +212,39 @@ function CalculateOrderPages($qty_ordered, $einheit, $vpe, $packstueck){
     return $anzahl;
 }
 
+
+function CreateLortTable ($lorts){
+    $html = "<table>";
+    $html = $html . "<tr>";
+    $html = $html . "<th>Lager ID</th>";
+    $html = $html . "<th>Ort</th>";
+    $html = $html . "<th>Bezeichnung</th>";
+    $html = $html . "<th>SKU</th>";
+    $html = $html . "<th>EAN</th>";
+    $html = $html . "<th>Artikel</th>";
+    $html = $html . "<th>Bestand</th>";
+    $html = $html . "<th>Benutzer</th>";
+    $html = $html . "<th>Status</th>";
+    $html = $html . "</tr>";
+
+    foreach ($lorts as $lort){
+        $html = $html . "<tr>";
+        $html = $html . "<td>$lort->lort_id</td>";
+        $html = $html . "<td>$lort->lort_ort</td>";
+        $html = $html . "<td>$lort->lort_name</td>";
+        $html = $html . "<td>$lort->sku</td>";
+        $html = $html . "<td>$lort->ean</td>";
+        $html = $html . "<td>$lort->artikel</td>";
+        $html = $html . "<td>$lort->menge</td>";
+        $html = $html . "<td>$lort->booking_user</td>";
+        $html = $html . "<td>$lort->status</td>";
+        $html = $html . "</tr>";
+    }
+    $html = $html . "<table>";
+
+    return $html;
+}
+
 function CreatePDFFile($servername, $username, $password, $dbname, $order, $orderlines, $singleorder, $pdf){
     require_once('EAN13.php');
 

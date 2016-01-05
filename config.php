@@ -20,6 +20,20 @@ class Lagerort
     public $lort_artikel = "";
     public $menge = 0;
 }
+
+class LagerortArtikelbestand
+{
+    public $lort_id = "";
+    public $lort_ort = "";
+    public $lort_name = "";
+    public $sku = "";
+    public $ean = "";
+    public $artikel = "";
+    public $menge = 0;
+    public $booking_user = "";
+    public $status = "";
+}
+
 class Article
 {
     public $entity_id = 0;

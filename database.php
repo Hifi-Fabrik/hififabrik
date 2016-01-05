@@ -46,6 +46,53 @@ function GetMKZandUGP ($MKZ, $UGP, $order, $function)
     return;
 }
 
+function GetLagerortBestand ($Artikel){
+    $servername = "localhost";
+    $username = "hififabrik_int";
+    $password = "Hf54mC74slRw";
+    $dbname = "hififabrik_intern";
+
+    $lortbst = null;
+
+    if (db_exists($servername, $username, $password, $dbname)) {
+// Create connection
+        $conn = new mysqli($servername, $username, $password, $dbname);
+        $sqllort = "SELECT * FROM `lagerorte` ORDER BY id ASC";
+        $result = $conn->query($sqllort);
+        if ($result->num_rows > 0) {
+            while ($unit = $result->fetch_assoc()) {
+                $lortb = new LagerortArtikelbestand();
+                $lortb->lort_id = $unit["id"];
+                $lortb->lort_ort = $unit["ort"];
+                $lortb->lort_name = $unit["name"];
+
+                $whereclausel = "'ean' like %" . $Artikel->ean . "% or";
+                $whereclausel = $whereclausel . "'sku' like %" . $Artikel->sku . "% or";
+                $whereclausel = $whereclausel . "'name' like %" . $Artikel->name . "% ";
+                $sql = "SELECT * FROM `lagerortartikelbestand` WHERE " . $whereclausel;
+                echo "<br>SQL: " . $sql;
+                $res = $conn->query($sql);
+                $lortb->menge = null;
+                $lortb->sku = "SKU ?";
+                $lortb->ean = "EAN ?";
+                $lortb->artikel = "Artikelbezeichnung?";
+                if ($res->num_rows = 1) {
+                    $lortb->menge = $res['quantity'];
+                    $lortb->sku = $Artikel->sku;
+                    $lortb->ean = $Artikel->ean;
+                    $lortb->artikel = $Artikel->name;
+                }
+                $lortbst[] = $lortb;
+            }
+        } else {
+            return null;
+        }
+    } else {
+        echo "database NOT found<br>\n";
+    }
+    return $lortbst;
+}
+
 function RecordKeyExists (&$conn, $tablename, $keyfield, $keyvalue){
     $fnd = false;
     $sql = "select " . $keyfield . " FROM " . $tablename . " WHERE ". $keyfield . " like " . $keyvalue;

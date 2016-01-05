@@ -47,7 +47,7 @@ GetMKZandUGP($MKZ, $UGP, $order, $func);
 
 $func = "WARES";
 
-echo "<form action=\"lager.php" . "?MKZ="  . $MKZ . "&UPG=" . $UGP . "&function=" . $func . "&order=" . $order . "\" method=\"POST\">";
+echo "<form action=\"lager.php" . "?MKZ="  . $MKZ . "&UPG=" . $UGP . "&function=" . $func . "\" method=\"POST\">";
 
 $servername = "localhost";
 $username = "hififabrik_int";
@@ -124,6 +124,7 @@ if ($func == "") {
                 $art = new Article;
                 $articlefound = false;
                 if ($art = mysql_fetch_object($res)){
+                    $articlefound = true;
                     echo GetUserInfo();
                     echo "<table  border=\"0\" style='width: 1024px; border-collapse: collapse; '>";
                     echo "<tr>";
@@ -149,16 +150,9 @@ if ($func == "") {
                     echo "<td width='50px'>" . $art->is_in_stock . "</td>";
                     echo "</tr>";
                     echo "</table>";
-
                     echo "<br><span>Lagerbestand des Artikels nach Lagerort(en):</span><br><br><br>";
-
-                    $link = OpenDatabase();
-                    $sql = "SELECT * FROM `Lagerorte`";
-                    $res = mysql_query($sql, $link);
-                    $lort = new Lagerort();
-                    while ($lort = mysql_fetch_object($res)){
-
-                    }
+                    $lortbest = GetLagerortBestand($art);
+                    echo CreateLortTable($lortbest);
                 }
                 if (!$orderfound && !$articlefound){
                     echo "<span style=\"font-size: 12pt;color:#ff0000;\" >Artikel mit EAN Nummer " . $eanorder . " existiert nicht.</span><br>";
